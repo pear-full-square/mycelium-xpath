@@ -45,8 +45,8 @@ functions. The parent (`..`) is not built: a query looks forward only.
 The tree is handed in, `tree`:
 
 - `children(node)`: as `select`'s
-- `document(node)`, optional: the node's document, a plain value, or
-  `null`. It continues the tree below the node: a step that names no child
+- `document(node, ref)`, optional: the node's document, a plain value, or
+  `null` (`ref`: its reference, `{ path, node }`). It continues the tree below the node: a step that names no child
   is looked for among the document's keys, and goes on inside it (an
   object's keys, a list's indexes). A leaf in a filter is a key holding a
   value. A leaf of the tree has a value when its document is no object
