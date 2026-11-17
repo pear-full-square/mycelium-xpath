@@ -9,6 +9,11 @@ Paths are `/`-separated from the root, and valid: they are validated at
 the boundary (`mycelium-uri`), not here. A `*` step matches every child.
 Names match exactly.
 
+## Links
+
+- [lib](lib/)
+- [test](test/)
+
 ## API
 
 - `select(children, root, path, match?)` → every node matching `path`, as
@@ -66,11 +71,6 @@ How it is read, a segment, a filter, a document continuing the tree, a
 position: the XPath documentation.
 
 ## The folders
-
-| | |
-|---|---|
-| [lib/](lib/) | its parts, a file each |
-| [test/](test/) | its tests, what each checks |
 
 ## Tests
 
