@@ -27,21 +27,10 @@ run reproduces them from their arguments.
 
 ## A query
 
-`query` reads standard XPath's forward part, in phases. This is phase 1:
-
-| | | example |
-|---|---|---|
-| step | a child by name, any child, the node itself | `swarms/swarm-1`, `swarms/*`, `.` |
-| filter | a leaf compared: `=`, `!=`, `<`, `<=`, `>`, `>=` | `*[name='sam']`, `*[size>2]` |
-| filter | a leaf is there; a leaf by a path | `*[name]`, `*[value/uri='main/host']` |
-| filter | `and`, `or`, `not()`, brackets; several in a row | `*[size>2 and name='sam'][state]` |
-| filter | a position, alone in its filter, from 1; the last | `*[2]`, `tags[last()]` |
-| function | `name()`, `starts-with()`, `contains()` | `*[starts-with(name,'s')]` |
-| value | a quoted text, a number; `@leaf` is `leaf` | `'sam'`, `3` |
-
-Refused, and said as such: descendants (`//`), the union (`|`),
-`position()` and a position joined with something else, the axes written
-out (`::`), a filter inside a filter, the other functions. The parent (`..`) is not built: a query looks forward only.
+`query` reads standard XPath's forward part, in phases: what a query is,
+what phase 1 holds and what is refused, is the base family's XPath
+documentation (`haiccing/base-docs-xpath`). Here, what `query` is handed
+and what it gives back.
 
 The tree is handed in, `tree`:
 
@@ -73,14 +62,8 @@ What comes back:
   query's text from there on, a query for who goes on elsewhere, from that
   node as its root. A filter on a node it stops at goes with it
 
-It parses, processes and continues: a segment (steps up to a filter or the
-end) is walked, a filter makes the set smaller, and so on. A segment reads
-a document only where a step names no child; a filter reads the documents
-of the nodes it filters, each once a query. A number compares as a number,
-and so does an order (`<`, `>`); anything else as text. A filter that
-compares several values holds when one of them does. A position is the
-n-th of the nodes the step selected under the same parent, in the order
-they came: the tree's own, a list's. It reads nothing.
+How it is read, a segment, a filter, a document continuing the tree, a
+position: the XPath documentation.
 
 ## The folders
 
