@@ -103,6 +103,23 @@ has nothing to do with the slices.
   `await result.all()` → every node left; `for await (const node of result)`
 - `result.nodeset` → its node set, as data; `result.stopped` → where it
   stopped at a shortcut; `result.done`
+- `await result.slice()` → the nodes of its next slice: what one answer
+  carries; `result.metadata` → its node set as data, its nodes left
+  out: what travels with a slice
+- `id`, `resume` (the constructor's): `id` the node set's identity, the
+  request that made it; `resume` a node set's metadata, from who holds
+  it: the result goes on from where that one has read to
+
+### Held by who asked
+
+`answered(answer, more)`: the same result outside the request that made
+it. An answer carries a node set's metadata and one slice of its nodes
+(`{ nodeset, nodes }`); it is iterated the same way (`iterateNext`,
+`take`, `all`, `for await`). At the end of the slice in hand the next is
+asked for under the hood: `more(metadata)` → the next answer, which must
+carry the same id. Nothing is kept where the data is between two
+slices: the metadata says where the reading is. A plain answer (an
+array: all of it) is a result with nothing more to ask.
 
 ## The node set
 
