@@ -101,7 +101,9 @@ stays inside it, so a new way of storing, or of reaching what is
 stored, changes no reader.
 
 - `new XPathResult(logical, { physical, fixed, next, took, run, address,
-  observe })`: `logical` the request, `{ query, mode, layer }`;
+  observe })`: `logical` the request, `{ query, mode, layer, ascending }`
+  (`ascending`: a topic from its earliest on; when not said, from its
+  latest back);
   `physical` its storage's structure type (a plain tree when none);
   `next`, `took` and `address` the structure type's
   (`mycelium-xpath-physical`); `run(text)` a physical query executed
