@@ -79,6 +79,31 @@ position: the XPath documentation.
 
 - `brittle-bare test/*.test.js` (Bare installed): the query, step by step: names, filters, positions, functions, where it stops, async children and documents; select, exact or matched; each test by its name in [test/](test/).
 
+## The result
+
+`XPathResult`: what a query hands back, the standard's iterator form of
+an XPath result: the next node is asked for, and fetched as the reading
+goes. It is where logical and physical meet. Whoever reads it sees the
+logical side only: a sequence of nodes at their logical addresses.
+Underneath it holds a node set (below), turns the logical query into
+the physical queries that fetch its slices, runs them when the reading
+reaches the end of the slice in hand, and gives each node found its
+logical address. How many nodes a reader takes is the reader's own: it
+has nothing to do with the slices.
+
+- `new XPathResult(logical, { physical, fixed, next, took, run, address,
+  observe })`: `logical` the request, `{ query, mode, layer }`;
+  `physical` its storage's structure type (a plain tree when none);
+  `next`, `took` and `address` the structure type's
+  (`mycelium-xpath-physical`); `run(text)` a physical query executed
+- `await result.iterateNext()` → the next node, `{ path, stored, node }`
+  or `{ path, stored, value }`: `path` its logical address, `stored`
+  where it is stored; `null` at the end
+- `await result.take(n)` → the next n, fewer at the end;
+  `await result.all()` → every node left; `for await (const node of result)`
+- `result.nodeset` → its node set, as data; `result.stopped` → where it
+  stopped at a shortcut; `result.done`
+
 ## The node set
 
 What a query answers, as a data structure. It is logical: it says what
