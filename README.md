@@ -27,6 +27,9 @@ Names match exactly.
 
 - `query(tree, root, text)` → `{ found, stopped }`: a query, below
 
+- `nodeset(logical, physical, fixed)`, `reader(set, hooks)`: the node
+  set, what a query answers, and its reading: below
+
 `select` and `query` are async. Plain, pure functions, not instrumented: a
 run reproduces them from their arguments.
 
@@ -75,3 +78,35 @@ position: the XPath documentation.
 ## Tests
 
 - `brittle-bare test/*.test.js` (Bare installed): the query, step by step: names, filters, positions, functions, where it stops, async children and documents; select, exact or matched; each test by its name in [test/](test/).
+
+## The node set
+
+What a query answers, as a data structure. It is logical: it says what
+was asked, where it has read to and what its storage is, and it travels
+as it is. It holds no data until it is read; its data is loaded a batch
+at a time, each batch by a physical query: the query's text for the tree
+as it is stored, given by the storage's structure type
+(`mycelium-xpath-physical`) from the node set itself, and executed by
+`query`.
+
+```
+{ logical:  { query, mode, layer }   the request, in full
+  fixed:    the moment it was made    a topic: its latest offset
+  reached:  where it has read to      null until it is read
+  physical: { type, ... }             its storage's structure type
+  nodes:    []                        what is loaded
+  stopped:  []                        where it stopped at a shortcut
+  done:     false }                   true when there is no more
+```
+
+- `nodeset({ query, mode, layer }, physical, fixed)` → a node set, made:
+  nothing loaded. `physical` is `{ type: 'tree' }` by default: a plain
+  tree, its physical query the logical one
+- `reader(set, { next, took, run, observe })` → its reading:
+  `more()` the next batch loaded, its nodes (`null` when there was no
+  more; a batch may take several physical queries); `all()` every node;
+  iterated node by node, loading as it goes. `next` and `took` are the
+  structure type's (`mycelium-xpath-physical`); `run(text)` executes a
+  physical query (`query` on the stored tree); `observe(event, fn)`,
+  optional, runs each physical query through it: `{ logical, mode, type,
+  from, physical }`, for who logs
